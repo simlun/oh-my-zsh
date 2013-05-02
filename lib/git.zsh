@@ -2,7 +2,12 @@
 function git_prompt_info() {
   ref=$(git symbolic-ref HEAD 2> /dev/null) || \
   ref=$(git rev-parse --short HEAD 2> /dev/null) || return
-  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref#refs/heads/}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
+  ref=${ref#refs/heads/}
+  ref_length=${#ref}
+  if [ $ref_length -gt 16 ]; then
+    ref=$ref[0,16]…
+  fi
+  echo "$ZSH_THEME_GIT_PROMPT_PREFIX${ref}$(parse_git_dirty)$ZSH_THEME_GIT_PROMPT_SUFFIX"
 }
 
 
